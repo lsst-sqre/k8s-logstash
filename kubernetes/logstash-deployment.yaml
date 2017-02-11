@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: logstash
+spec:
+  template:
+    metadata:
+      labels:
+        name: logstash
+    spec:
+      containers:
+        - name: logstash
+          imagePullPolicy: "Always"
+          image: "lsstsqre/k8s-logstash"
+          env:
+            - name: LOGSTASH_SITE_ID
+              value: logstash-gke
+            - name: REMOTE_LOGSTASH_URL
+              value: https://a-lfr.lsst.codes:5045/
+            - name: AUTHORIZATION_HASH
+              valueFrom:
+                secretKeyRef:
+                  name: logstash
+                  key: logstash.remote.authorization
